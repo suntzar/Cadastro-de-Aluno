@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro de Aluno</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f9f9f9;
+      }
+      /* Ajuste para feedback (alerta) */
+      #feedback {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+      }
+      /* Removendo margens padrões de listas */
+      #alunosList {
+        padding: 0;
+        list-style: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Cabeçalho -->
+    <header class="bg-light py-3 shadow-sm mb-4">
+<nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">Navbar</span>
+  </div>
+</nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mb-5">
+      <!-- Formulário de Cadastro -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <form id="alunoForm">
+            <!-- Dados Básicos -->
+            <section class="mb-4">
+              <h2 class="h4 mb-3">Dados Básicos</h2>
+              <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  placeholder="Nome do aluno"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                <!-- Alterado para type="text" -->
+                <input
+                  type="text"
+                  id="dataNascimento"
+                  name="dataNascimento"
+                  placeholder="dd/mm/aaaa"
+                  class="form-control"
+                />
+              </div>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label for="sexo" class="form-label">Sexo</label>
+                  <select id="sexo" name="sexo" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="corRaca" class="form-label">Cor/Raça</label>
+                  <select id="corRaca" name="corRaca" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="Branca">Branca</option>
+                    <option value="Negra">Negra</option>
+                    <option value="Parda">Parda</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label for="turmaAtual" class="form-label">Turma Atual</label>
+                  <select id="turmaAtual" name="turmaAtual" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="Creche III">Creche III</option>
+                    <option value="Infantil I">Infantil I</option>
+                    <option value="Infantil II">Infantil II</option>
+                    <option value="1° ano">1° ano</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-3">
+                <label for="turnoAtual" class="form-label">Turno Atual</label>
+                <select id="turnoAtual" name="turnoAtual" class="form-select">
+                  <option value="">Selecione</option>
+                  <option value="matutino">Matutino</option>
+                  <option value="vespertino">Vespertino</option>
+                </select>
+              </div>
+              <div class="mt-3">
+                <label class="form-label">Contatos do Aluno</label>
+                <div id="contatosList"></div>
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm mt-2"
+                  id="addContato"
+                >
+                  <i class="fas fa-plus"></i> Adicionar Contato
+                </button>
+              </div>
+            </section>
+
+            <!-- Responsáveis -->
+            <section class="mb-4">
+              <h2 class="h4 mb-3">Responsáveis</h2>
+              <!-- Pai -->
+              <div class="mb-3">
+                <h3 class="h6">Pai</h3>
+                <label for="paiNome" class="form-label">Nome</label>
+                <input
+                  type="text"
+                  id="paiNome"
+                  name="paiNome"
+                  class="form-control"
+                />
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="paiCPF" class="form-label">CPF</label>
+                  <input
+                    type="text"
+                    id="paiCPF"
+                    name="paiCPF"
+                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                    placeholder="000.000.000-00"
+                    class="form-control"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="paiTelefone" class="form-label">Telefone</label>
+                  <input
+                    type="text"
+                    id="paiTelefone"
+                    name="paiTelefone"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <!-- Mãe -->
+              <div class="mb-3">
+                <h3 class="h6">Mãe</h3>
+                <label for="maeNome" class="form-label">Nome</label>
+                <input
+                  type="text"
+                  id="maeNome"
+                  name="maeNome"
+                  class="form-control"
+                />
+              </div>
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="maeCPF" class="form-label">CPF</label>
+                  <input
+                    type="text"
+                    id="maeCPF"
+                    name="maeCPF"
+                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                    placeholder="000.000.000-00"
+                    class="form-control"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="maeTelefone" class="form-label">Telefone</label>
+                  <input
+                    type="text"
+                    id="maeTelefone"
+                    name="maeTelefone"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <!-- Responsável -->
+              <div class="mb-3">
+                <h3 class="h6">Responsável</h3>
+                <label for="respNome" class="form-label">Nome</label>
+                <input
+                  type="text"
+                  id="respNome"
+                  name="respNome"
+                  class="form-control"
+                />
+              </div>
+              <div class="row g-3">
+                <div class="col-md-6 mb-3">
+                  <label for="respCPF" class="form-label">CPF</label>
+                  <input
+                    type="text"
+                    id="respCPF"
+                    name="respCPF"
+                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                    placeholder="000.000.000-00"
+                    class="form-control"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="respTelefone" class="form-label">Telefone</label>
+                  <input
+                    type="text"
+                    id="respTelefone"
+                    name="respTelefone"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </section>
+
+            <!-- Endereço -->
+            <section class="mb-4">
+              <h2 class="h4 mb-3">Endereço</h2>
+              <div class="mb-3">
+                <label for="bairro" class="form-label">Bairro</label>
+                <input
+                  type="text"
+                  id="bairro"
+                  name="bairro"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="endereco" class="form-label">Endereço</label>
+                <input
+                  type="text"
+                  id="endereco"
+                  name="endereco"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="cep" class="form-label">CEP</label>
+                <input
+                  type="text"
+                  id="cep"
+                  name="cep"
+                  pattern="\d{5}-\d{3}"
+                  placeholder="00000-000"
+                  class="form-control"
+                />
+              </div>
+            </section>
+
+            <!-- Detalhes -->
+            <section class="mb-4">
+              <h2 class="h4 mb-3">Detalhes</h2>
+              <div class="mb-3">
+                <label for="certidaoNascimento" class="form-label">Certidão de Nascimento</label>
+                <input
+                  type="text"
+                  id="certidaoNascimento"
+                  name="certidaoNascimento"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="cpf" class="form-label">CPF</label>
+                <input
+                  type="text"
+                  id="cpf"
+                  name="cpf"
+                  pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                  placeholder="000.000.000-00"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="naturalidade" class="form-label">Naturalidade</label>
+                <input
+                  type="text"
+                  id="naturalidade"
+                  name="naturalidade"
+                  class="form-control"
+                />
+              </div>
+            </section>
+
+            <!-- Observações -->
+            <section class="mb-4">
+              <h2 class="h4 mb-3">Observações</h2>
+              <div class="mb-3">
+                <label for="restricoes" class="form-label">Restrições/Alergias</label>
+                <textarea
+                  id="restricoes"
+                  name="restricoes"
+                  rows="3"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="necessidades" class="form-label">Necessidades Especiais</label>
+                <textarea
+                  id="necessidades"
+                  name="necessidades"
+                  rows="3"
+                  class="form-control"
+                ></textarea>
+              </div>
+            </section>
+
+            <!-- Matrículas -->
+            <section class="mb-4 text-center">
+              <h2 class="h4 mb-3">Matrículas</h2>
+              <div id="matriculasList"></div>
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm mt-2"
+                id="addMatricula"
+              >
+                <i class="fas fa-plus"></i> Adicionar Matrícula
+              </button>
+            </section>
+
+            <!-- Ações -->
+            <section class="text-center">
+              <button type="submit" class="btn btn-primary me-2">
+                <i class="fas fa-save"></i> Salvar
+              </button>
+              <button type="button" id="downloadJson" class="btn btn-outline-secondary">
+                <i class="fas fa-download"></i> Exportar JSON
+              </button>
+            </section>
+          </form>
+          <!-- Feedback (alerta) -->
+          <div id="feedback"></div>
+        </div>
+      </div>
+
+      <!-- Painel de Controle -->
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Painel de Controle</h2>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <h3 class="h6">Alunos Cadastrados</h3>
+              <ul id="alunosList" class="list-group"></ul>
+            </div>
+            <div class="col-md-6">
+              <h3 class="h6">JSON</h3>
+              <textarea
+                id="jsonView"
+                class="form-control mb-2"
+                style="height: 200px; font-family: monospace"
+              ></textarea>
+              <button type="button" id="updateJson" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-sync"></i> Atualizar JSON
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-light text-center py-3">
+      <p class="mb-0">© 2023 E. M. Ana Maria Cordeiro de Sousa</p>
+    </footer>
+
+    <!-- Bootstrap JS Bundle (inclui Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script de Funcionamento -->
+    <script>
+      // Funções auxiliares para gerenciar o LocalStorage
+      function loadDatabase() {
+        const db = localStorage.getItem("alunosDB");
+        return db ? JSON.parse(db) : { alunos: [] };
+      }
+
+      function saveDatabase(db) {
+        localStorage.setItem("alunosDB", JSON.stringify(db, null, 2));
+      }
+
+      // Adicionar Matrícula (usando card do Bootstrap)
+      function addMatricula(data = "", sala = "", turno = "") {
+        const container = document.createElement("div");
+        container.classList.add("card", "mb-3", "p-3");
+        container.innerHTML = `
+          <div class="mb-2">
+            <label class="form-label">Data</label>
+            <!-- Alterado para input type="text" -->
+            <input type="text" class="form-control matricula-data" placeholder="dd/mm/aaaa">
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Sala</label>
+            <select class="form-select matricula-sala">
+              <option value="">Selecione</option>
+              <option value="Creche III" ${sala === "Creche III" ? "selected" : ""}>Creche III</option>
+              <option value="Infantil I" ${sala === "Infantil I" ? "selected" : ""}>Infantil I</option>
+              <option value="Infantil II" ${sala === "Infantil II" ? "selected" : ""}>Infantil II</option>
+              <option value="1° ano" ${sala === "1° ano" ? "selected" : ""}>1° ano</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <label class="form-label">Turno</label>
+            <select class="form-select matricula-turno">
+              <option value="">Selecione</option>
+              <option value="matutino" ${turno === "matutino" ? "selected" : ""}>Matutino</option>
+              <option value="vespertino" ${turno === "vespertino" ? "selected" : ""}>Vespertino</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-danger btn-sm remove-btn">
+            <i class="fas fa-trash"></i> Remover
+          </button>
+        `;
+        container.querySelector(".remove-btn").addEventListener("click", () => container.remove());
+        document.getElementById("matriculasList").appendChild(container);
+      }
+
+      // Adicionar Contato (usando input group do Bootstrap)
+      function addContato(value = "") {
+        const container = document.createElement("div");
+        container.classList.add("input-group", "mb-3");
+        container.innerHTML = `
+          <input type="text" class="form-control contato-input" placeholder="Telefone" value="${value}">
+          <button type="button" class="btn btn-danger remove-btn">
+            <i class="fas fa-trash"></i>
+          </button>
+        `;
+        container.querySelector(".remove-btn").addEventListener("click", () => container.remove());
+        document.getElementById("contatosList").appendChild(container);
+      }
+
+      document.getElementById("addMatricula").addEventListener("click", () => addMatricula());
+      document.getElementById("addContato").addEventListener("click", () => addContato());
+
+      // Atualizar Painel de Controle
+      function updateControlPanel() {
+        const db = loadDatabase();
+        const alunosList = document.getElementById("alunosList");
+        alunosList.innerHTML = "";
+        db.alunos.forEach((aluno, index) => {
+          const li = document.createElement("li");
+          li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+          li.innerHTML = `
+            <span>${aluno.dadosBasicos.nome || "Sem nome"} - ${aluno.dadosBasicos.turmaAtual || "N/A"}</span>
+            <button data-index="${index}" class="btn btn-danger btn-sm">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          `;
+          alunosList.appendChild(li);
+        });
+        document.getElementById("jsonView").value = JSON.stringify(db, null, 2);
+      }
+
+      document.getElementById("alunosList").addEventListener("click", e => {
+        const btn = e.target.closest("button");
+        if (btn) {
+          const index = parseInt(btn.getAttribute("data-index"));
+          const db = loadDatabase();
+          db.alunos.splice(index, 1);
+          saveDatabase(db);
+          updateControlPanel();
+          showFeedback("Aluno removido!", "success");
+        }
+      });
+
+      // Exibir Feedback utilizando alertas do Bootstrap
+      function showFeedback(message, type) {
+        const feedback = document.getElementById("feedback");
+        feedback.innerHTML = `<div class="alert ${
+          type === "success" ? "alert-success" : "alert-danger"
+        } alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+      }
+
+      // Processar o formulário
+      document.getElementById("alunoForm").addEventListener("submit", e => {
+        e.preventDefault();
+        const aluno = {
+          dadosBasicos: {
+            nome: document.getElementById("nome").value,
+            dataNascimento: document.getElementById("dataNascimento").value,
+            sexo: document.getElementById("sexo").value,
+            corRaca: document.getElementById("corRaca").value,
+            turmaAtual: document.getElementById("turmaAtual").value,
+            turnoAtual: document.getElementById("turnoAtual").value,
+            contatos: Array.from(document.querySelectorAll(".contato-input"))
+              .map(input => input.value.trim())
+              .filter(val => val)
+          },
+          responsaveis: {
+            pai: {
+              nome: document.getElementById("paiNome").value,
+              cpf: document.getElementById("paiCPF").value,
+              telefone: document.getElementById("paiTelefone").value
+            },
+            mae: {
+              nome: document.getElementById("maeNome").value,
+              cpf: document.getElementById("maeCPF").value,
+              telefone: document.getElementById("maeTelefone").value
+            },
+            responsavel: {
+              nome: document.getElementById("respNome").value,
+              cpf: document.getElementById("respCPF").value,
+              telefone: document.getElementById("respTelefone").value
+            }
+          },
+          endereco: {
+            bairro: document.getElementById("bairro").value,
+            endereco: document.getElementById("endereco").value,
+            cep: document.getElementById("cep").value
+          },
+          detalhes: {
+            certidaoNascimento: document.getElementById("certidaoNascimento").value,
+            cpf: document.getElementById("cpf").value,
+            naturalidade: document.getElementById("naturalidade").value
+          },
+          observacoes: {
+            restricoes: document.getElementById("restricoes").value,
+            necessidades: document.getElementById("necessidades").value
+          },
+          matriculas: Array.from(document.querySelectorAll(".card.mb-3")).map(container => ({
+            data: container.querySelector(".matricula-data").value,
+            sala: container.querySelector(".matricula-sala").value,
+            turno: container.querySelector(".matricula-turno").value
+          }))
+        };
+
+        const db = loadDatabase();
+        db.alunos.push(aluno);
+        saveDatabase(db);
+        showFeedback("Aluno cadastrado com sucesso!", "success");
+        updateControlPanel();
+        document.getElementById("alunoForm").reset();
+        document.getElementById("matriculasList").innerHTML = "";
+        document.getElementById("contatosList").innerHTML = "";
+      });
+
+      // Exportar JSON
+      document.getElementById("downloadJson").addEventListener("click", () => {
+        const db = loadDatabase();
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+        const a = document.createElement("a");
+        a.setAttribute("href", dataStr);
+        a.setAttribute("download", "alunosDB.json");
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+
+      // Atualizar JSON a partir da textarea
+      document.getElementById("updateJson").addEventListener("click", () => {
+        try {
+          const newDb = JSON.parse(document.getElementById("jsonView").value);
+          saveDatabase(newDb);
+          updateControlPanel();
+          showFeedback("JSON atualizado!", "success");
+        } catch (e) {
+          showFeedback("Erro no JSON: " + e.message, "error");
+        }
+      });
+
+      updateControlPanel();
+    </script>
+  </body>
+</html>
